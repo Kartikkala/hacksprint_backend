@@ -1,9 +1,9 @@
 import { Model } from "mongoose";
-import { IGameDocument } from "../../../types/lib/db/Games/types";
+import { ITimePeriodDocument } from "../../../types/lib/db/TimePeriods/types";
 import { IDatabase } from "../../../types/lib/db/UserMangement/types";
-import { gameSchema } from "./schema.js";
+import { timePeriodSchema } from "./schema.js";
 
-export default function gamesCollection(mongoose : IDatabase, gameCollectionName : string) : Model<IGameDocument>
+export default function timePeriodCollection(mongoose : IDatabase, gameCollectionName : string) : Model<ITimePeriodDocument>
 {
-    return mongoose.model("game", gameSchema(mongoose), gameCollectionName)
+    return mongoose.model("timePeriod", timePeriodSchema(mongoose), gameCollectionName)
 }

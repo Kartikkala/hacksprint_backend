@@ -1,28 +1,17 @@
 import { Schema } from "mongoose"
-import {IGameDocument} from "../../../types/lib/db/Games/types.js"
+import {ITimePeriodDocument} from "../../../types/lib/db/TimePeriods/types.js"
 import { IDatabase } from "../../../types/lib/db/UserMangement/types.js"
 
 
-export function gameSchema(mongoose : IDatabase) : Schema<IGameDocument>
+export function timePeriodSchema(mongoose : IDatabase) : Schema<ITimePeriodDocument>
 {
-    return new mongoose.Schema<IGameDocument>({
-        gameId : {
+    return new mongoose.Schema<ITimePeriodDocument>({
+        timePeriodId : {
             type : String,
             required : true,
             unique : true
         }, 
-        name : String,
-        type: Boolean,
-        maxTeams : Number,
-        maxTeamMembers : Number,
-        modeName : {
-            type : String, 
-            required : false
-        },
-        imageBanner : {
-            type : Buffer,
-            required : false
-        }
+        name : String
     })
 }
 

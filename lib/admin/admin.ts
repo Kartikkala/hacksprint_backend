@@ -1,26 +1,25 @@
 import { IJwtPayload } from '../../types/lib/authentication/jwt/helper/types'; // assuming types are defined somewhere else
-import { IGameAndEventsManagerFactory } from '../../types/lib/gamesManagement/game.js';
+import TimePeriodAndEventsManagerFactory from '../TimePeriodAndEvents';
 
 export class Admin {
     private static instance: Admin; // singleton instance
     
-    constructor(private gamesAndEvents: IGameAndEventsManagerFactory) { }
+    constructor(private timePeriodAndEventsManagerFactory: TimePeriodAndEventsManagerFactory) { }
     
-    public static getInstance(gamesAndEvents : IGameAndEventsManagerFactory): Admin {
+    public static getInstance(timePeriodAndEventsManagerFactory : TimePeriodAndEventsManagerFactory): Admin {
         if (!Admin.instance) {
-            Admin.instance = new Admin(gamesAndEvents); 
+            Admin.instance = new Admin(timePeriodAndEventsManagerFactory); 
         }
         
         return Admin.instance;
     }
     
-    // Assuming `createGameEvent` and `createGame` are methods in '@lib/gamesAndEvents/index.js' 
-    public createGameEvent(user : IJwtPayload, gameId : string, prizepool : number, eventDateTime : string ,fee : number = 0) {
+    public createTimePeriodEvent(user : IJwtPayload, timePeriodId : string, eventDateTime : string,eventVenue : string ,fee : number = 0) {
         if (user.admin) {
-            const game = this.gamesAndEvents.getGameWithId(gameId)
-            if(game)
+            const timePeriod = this.timePeriodAndEventsManagerFactory.getTimePeriodWithId(timePeriodId)
+            if(timePeriod)
             {
-                return this.gamesAndEvents.createEvent(game, prizepool, eventDateTime ,fee);
+                return this.timePeriodAndEventsManagerFactory.createEvent(timePeriod, eventDateTime, eventVenue ,fee);
             }
         } else {
             throw new Error("User is not an admin");
@@ -29,7 +28,7 @@ export class Admin {
     
     public createGame(user : IJwtPayload, name : string, type : boolean, modeName? : string, maxTeamMembers? : number, maxTeams? : number, imageBanner? : Buffer) {
         if (user.admin) {
-            return this.gamesAndEvents.createNewGame(name, type, maxTeams, maxTeamMembers,modeName, imageBanner);
+            return this.timePeriodAndEventsManagerFactory.createEvent(name, type, maxTeams, maxTeamMembers,modeName, imageBanner);
         } else {
             throw new Error("User is not an admin");
         }
@@ -39,7 +38,7 @@ export class Admin {
     {
         if(user.admin)
         {
-            return this.gamesAndEvents.getAllGames()
+            return this.timePeriodAndEventsManagerFactory.getAllGames()
         }
         else{
             throw new Error("User is not an admin");
@@ -48,9 +47,9 @@ export class Admin {
 
     public updateGame(user : IJwtPayload, gameId: string, name?:string, type?:boolean, modeName?:string, maxTeamMembers?:number, maxTeams?:number, imageBanner?:Buffer){
         if(user.admin) {
-            const game = this.gamesAndEvents.getGameWithId(gameId);
+            const game = this.timePeriodAndEventsManagerFactory.getGameWithId(gameId);
             if (game){
-                return this.gamesAndEvents.updateGame(gameId, name, type, maxTeams, maxTeamMembers, modeName, imageBanner);
+                return this.timePeriodAndEventsManagerFactory.updateGame(gameId, name, type, maxTeams, maxTeamMembers, modeName, imageBanner);
             } else {
                 throw new Error("No game with given id exists");
             }

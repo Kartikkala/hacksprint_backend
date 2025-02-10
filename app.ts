@@ -8,7 +8,7 @@ import path,{dirname} from 'path'
 import AdminRouter from "./routes/adminRoutes.js";
 import getAuthenticationRouter from "./routes/authenticationRoutes.js";
 
-import GameAndEventsManagerFactory from "./lib/GamesAndEvents/index.js"
+import GameAndEventsManagerFactory from "./lib/TimePeriodAndEvents/index.js"
 import AuthenticationFactory from "./lib/authentication/authenticator.js";
 import DatabaseFactory from "./lib/db/database.js";
 import AuthorisationMiddlewareFactory from "./lib/authorisation/index.js";

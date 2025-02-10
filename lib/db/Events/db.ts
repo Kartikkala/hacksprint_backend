@@ -1,12 +1,12 @@
 import GameEventModel from './models.js'; 
-import { IGameEventDocument, IGameEventsDatabase } from '../../../types/lib/db/GameEvents/types.js';
-import { IGameEvent } from '../../../types/lib/gamesManagement/game.js';
-import { Model, Types } from 'mongoose';
+import { ITimePeriodEventDocument } from '../../../types/lib/db/TimePeriodEvents/types.js';
+import { Model } from 'mongoose';
 import { IDatabase } from '../../../types/lib/db/UserMangement/types.js';
-import { IGame } from '../../../types/lib/gamesManagement/game.js';
+import { TimePeriodEvent } from '../../TimePeriodAndEvents/eventManager.js';
+import { TimePeriod } from '../../TimePeriodAndEvents/timePeriodManager.js';
 
-export class GameEventsDatabase implements IGameEventsDatabase{
-    private gameEventCollection: Model<IGameEventDocument>;
+export class TimePeriodEventsDatabase{
+    private gameEventCollection: Model<ITimePeriodEventDocument>;
     private database: IDatabase;
     
     constructor(database: IDatabase, eventCollectionName: string) {
@@ -17,9 +17,9 @@ export class GameEventsDatabase implements IGameEventsDatabase{
         this.gameEventCollection = GameEventModel(database, eventCollectionName);
     }
     
-    async getGameEvents(): Promise<(IGameEventDocument & { game: IGame })[]> {
+    async getTimePeriodEvents(): Promise<(ITimePeriodEventDocument & { timePeriod: TimePeriod })[]> {
     const connectionStatus = await this.database.connectToDatabase();
-    let result: (IGameEventDocument & { game: IGame })[] = [];
+    let result: (ITimePeriodEventDocument & { timePeriod: TimePeriod })[] = [];
     
     if(connectionStatus)  {
         try{
@@ -32,17 +32,17 @@ export class GameEventsDatabase implements IGameEventsDatabase{
     return result;
     }
     
-    async createGameEvent(gameEvent: IGameEvent): Promise<boolean> {
+    async createTimePeriodEvent(timePeriodEvent: TimePeriodEvent): Promise<boolean> {
         const connectionStatus = await this.database.connectToDatabase();
         if(connectionStatus) {
             try{
-                let sanitizedEvent : IGameEventDocument = {
-                    eventId : gameEvent.eventId,
-                    players : gameEvent.players,
-                    eventDateTime : String(gameEvent.eventDateTime),
-                    gameId : gameEvent.game.gameId,
-                    prizepool : gameEvent.prizepool,
-                    fee : gameEvent.fee
+                let sanitizedEvent : ITimePeriodEventDocument = {
+                    eventId : timePeriodEvent.eventId,
+                    users : timePeriodEvent.users,
+                    eventDateTime : timePeriodEvent.eventDateTime,
+                    timePeriodId : timePeriodEvent.timePeriod.timePeriodId,
+                    eventVenue : timePeriodEvent.eventVenue,
+                    fee : timePeriodEvent.fee
                 };
                 await this.gameEventCollection.create(sanitizedEvent);
                 return true;
@@ -54,11 +54,11 @@ export class GameEventsDatabase implements IGameEventsDatabase{
         return false;
     }
     
-    async endGameEvent(gameEvent: IGameEvent): Promise<boolean> {
+    async endTimePeriodEvent(timePeriodEvent: TimePeriodEvent): Promise<boolean> {
         const connectionStatus = await this.database.connectToDatabase();
         if(connectionStatus) {
             try{
-                await this.gameEventCollection.deleteOne({eventId : gameEvent.eventId})
+                await this.gameEventCollection.deleteOne({eventId : timePeriodEvent.eventId})
                 return true;
             } catch(e){
                 console.error(e);
@@ -68,18 +68,17 @@ export class GameEventsDatabase implements IGameEventsDatabase{
         return false;
     }
     
-    async updatePlayers(gameEventId: string, players : Map<string, string[]>): Promise<boolean>  {
+    async updateUsers(eventId: string, users : Map<String, String[]>): Promise<boolean>{
         const connectionStatus = await this.database.connectToDatabase();
         
         if (connectionStatus)   {
             try  {
-                await this.gameEventCollection.updateOne({ eventId: gameEventId }, { $set: { players : players} }); 
+                await this.gameEventCollection.updateOne({ eventId: eventId }, { $set: { users : users} }); 
                 return true;
              } catch (e)  {
                 console.error(e);
             }
         }
-        
         return false;
     }
 }

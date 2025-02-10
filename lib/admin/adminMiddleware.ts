@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import {Admin} from './admin.js';
-import { IGameAndEventsManagerFactory, IGameEvent } from '../../types/lib/gamesManagement/game.js';
 import MoneyManager from '../moneyManager/moneyManager.js';
+import TimePeriodAndEventsManagerFactory from '../TimePeriodAndEvents/index.js';
 
 export class AdminMiddleware {
     private static adminMiddlewareInstance : AdminMiddleware | null = null;
     private adminInstance: Admin;
     private moneyManager : MoneyManager
-    private constructor(gameAndEventsManagerFactory : IGameAndEventsManagerFactory, moneyManager : MoneyManager) {
+    private constructor(timePeriodAndEventsManagerFactory : TimePeriodAndEventsManagerFactory, moneyManager : MoneyManager) {
         this.adminInstance = Admin.getInstance(gameAndEventsManagerFactory);
         this.moneyManager = moneyManager
     } 

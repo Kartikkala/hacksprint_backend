@@ -1,4 +1,4 @@
-import { IGameDatabase } from "../../types/lib/db/Games/types.js"
+import { IGameDatabase } from "../../types/lib/db/TimePeriods/types.js"
 import crypto from 'crypto'
 import { IGame } from "../../types/lib/gamesManagement/game.js"
 import { IGameManager } from "../../types/lib/gamesManagement/game.js"

@@ -1,8 +1,8 @@
 import { Model } from 'mongoose';
-import { IGameEventDocument } from '../../../types/lib/db/GameEvents/types.js'; // assuming this is where IGameEventDocument interface resides
 import { IDatabase } from '../../../types/lib/db/UserMangement/types.js';
-import { gameEventSchema } from './schema.js'; // assuming the schema function is exported with this name and located in this file path
+import { ITimePeriodEventDocument } from '../../../types/lib/db/TimePeriodEvents/types.js';
+import { timePeriodEventSchema } from './schema.js';
 
-export default function gameEventsCollection(mongoose: IDatabase, eventCollectionName: string): Model<IGameEventDocument> {
-    return mongoose.model('GameEvent', gameEventSchema(mongoose), eventCollectionName);
+export default function timePeriodEventsCollection(mongoose: IDatabase, eventCollectionName: string): Model<ITimePeriodEventDocument> {
+    return mongoose.model('TimePeriodEvent', timePeriodEventSchema(mongoose), eventCollectionName);
 }
